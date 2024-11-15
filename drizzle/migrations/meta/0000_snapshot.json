@@ -28,12 +28,8 @@
           "name": "Affiliate_groupId_Group_id_fk",
           "tableFrom": "Affiliate",
           "tableTo": "Group",
-          "columnsFrom": [
-            "groupId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["groupId"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -43,9 +39,7 @@
         "Affiliate_groupId_unique": {
           "name": "Affiliate_groupId_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "groupId"
-          ]
+          "columns": ["groupId"]
         }
       }
     },
@@ -91,12 +85,8 @@
           "name": "Channel_groupId_Group_id_fk",
           "tableFrom": "Channel",
           "tableTo": "Group",
-          "columnsFrom": [
-            "groupId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["groupId"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -159,12 +149,8 @@
           "name": "Comment_postId_Post_id_fk",
           "tableFrom": "Comment",
           "tableTo": "Post",
-          "columnsFrom": [
-            "postId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["postId"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -172,12 +158,8 @@
           "name": "Comment_userId_User_id_fk",
           "tableFrom": "Comment",
           "tableTo": "User",
-          "columnsFrom": [
-            "userId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["userId"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -185,12 +167,8 @@
           "name": "Comment_commentId_Comment_id_fk",
           "tableFrom": "Comment",
           "tableTo": "Comment",
-          "columnsFrom": [
-            "commentId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["commentId"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -259,12 +237,8 @@
           "name": "Course_groupId_Group_id_fk",
           "tableFrom": "Course",
           "tableTo": "Group",
-          "columnsFrom": [
-            "groupId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["groupId"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -372,12 +346,8 @@
           "name": "Group_userId_User_id_fk",
           "tableFrom": "Group",
           "tableTo": "User",
-          "columnsFrom": [
-            "userId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["userId"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -387,9 +357,7 @@
         "Group_name_unique": {
           "name": "Group_name_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "name"
-          ]
+          "columns": ["name"]
         }
       }
     },
@@ -452,12 +420,8 @@
           "name": "Members_userId_User_id_fk",
           "tableFrom": "Members",
           "tableTo": "User",
-          "columnsFrom": [
-            "userId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["userId"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -465,12 +429,8 @@
           "name": "Members_groupId_Group_id_fk",
           "tableFrom": "Members",
           "tableTo": "Group",
-          "columnsFrom": [
-            "groupId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["groupId"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -520,12 +480,8 @@
           "name": "Message_senderid_User_id_fk",
           "tableFrom": "Message",
           "tableTo": "User",
-          "columnsFrom": [
-            "senderid"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["senderid"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -581,12 +537,8 @@
           "name": "Post_authorId_User_id_fk",
           "tableFrom": "Post",
           "tableTo": "User",
-          "columnsFrom": [
-            "authorId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["authorId"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -594,12 +546,8 @@
           "name": "Post_channelId_Channel_id_fk",
           "tableFrom": "Post",
           "tableTo": "Channel",
-          "columnsFrom": [
-            "channelId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["channelId"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -651,12 +599,8 @@
           "name": "Subscription_groupId_Group_id_fk",
           "tableFrom": "Subscription",
           "tableTo": "Group",
-          "columnsFrom": [
-            "groupId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["groupId"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -720,9 +664,7 @@
         "User_clerkId_unique": {
           "name": "User_clerkId_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "clerkId"
-          ]
+          "columns": ["clerkId"]
         }
       }
     }
@@ -731,10 +673,7 @@
     "public.GROUP_PRIVACY": {
       "name": "GROUP_PRIVACY",
       "schema": "public",
-      "values": [
-        "PUBLIC",
-        "PRIVATE"
-      ]
+      "values": ["PUBLIC", "PRIVATE"]
     }
   },
   "schemas": {},

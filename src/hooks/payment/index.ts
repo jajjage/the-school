@@ -7,8 +7,7 @@ import {
 } from "@/actions/payments"
 import { CreateGroupSchema } from "@/components/forms/create-group/schema"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js"
-import { loadStripe, StripeCardElement } from "@stripe/stripe-js"
+import { loadStripe } from "@stripe/stripe-js"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
@@ -29,8 +28,6 @@ export const usePayments = (
   stripeId?: string,
 ) => {
   const [isCategory, setIsCategory] = useState<string | undefined>(undefined)
-  const stripe = useStripe()
-  const elements = useElements()
   const router = useRouter()
 
   const {
@@ -62,44 +59,24 @@ export const usePayments = (
 
   const { mutateAsync: createGroup, isPending } = useMutation({
     mutationFn: async (data: z.infer<typeof CreateGroupSchema>) => {
-      if (!stripe || !elements || !Intent) {
-        return null
+    //  for payment implementation
+      if (affiliate) {
+        await onTransferCommission(stripeId!)
       }
-
-      const { error, paymentIntent } = await stripe.confirmCardPayment(
-        Intent.secret!,
-        {
-          payment_method: {
-            card: elements.getElement(CardElement) as StripeCardElement,
-          },
-        },
-      )
-
-      if (error) {
-        return toast("Error", {
-          description: "Oops! something went wrong, try again later",
+      const created = await onCreateNewGroup(userId, data)
+      if (created && created.status === 200) {
+        toast("Success", {
+          description: created.message,
         })
+        router.push(
+          `/group/${created.data?.group[0].id}/channel/${created.data?.group[0].channel[0].id}`,
+        )
       }
-
-      if (paymentIntent?.status === "succeeded") {
-        if (affiliate) {
-          await onTransferCommission(stripeId!)
-        }
-        const created = await onCreateNewGroup(userId, data)
-        if (created && created.status === 200) {
-          toast("Success", {
-            description: created.message,
-          })
-          router.push(
-            `/group/${created.data?.group[0].id}/channel/${created.data?.group[0].channel[0].id}`,
-          )
-        }
-        if (created && created.status !== 200) {
-          reset()
-          return toast("Error", {
-            description: created.message,
-          })
-        }
+      if (created && created.status !== 200) {
+        reset()
+        return toast("Error", {
+          description: created.message,
+        })
       }
     },
   })

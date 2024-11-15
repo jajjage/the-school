@@ -1,6 +1,5 @@
 // import PaymentForm from "./payment-form"
 
-import { StripeElements } from "@/components/global/stripe/elements"
 import PaymentForm from "./payment-form"
 
 type Props = {
@@ -11,9 +10,7 @@ type Props = {
 
 const CreateGroup = ({ userId, affiliate, stripeId }: Props) => {
   return (
-    <StripeElements>
-      <PaymentForm userId={userId} affiliate={affiliate} stripeId={stripeId} />
-    </StripeElements>
+    <PaymentForm userId={userId} affiliate={affiliate} stripeId={stripeId} />
   )
 }
 

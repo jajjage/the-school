@@ -43,7 +43,6 @@ export const GroupListSlider = ({
                 <GroupListItem {...item} selected={selected} />
               </Link>
             ) : (
-            
               <GroupListItem {...item} selected={selected} />
             )
           ) : (

@@ -106,7 +106,7 @@ export const onCreateNewGroup = async (
   } catch (error) {
     return {
       status: 400,
-      message: "Oops! group creation failed, try again later",
+      message: `try again ${error}`,
     }
   }
 }
@@ -256,4 +256,4 @@ export const onGetAllGroupMembers = async (groupid: string) => {
   } catch (error) {
     return { status: 400, message: "Oops something went wrong" }
   }
-} 
+}

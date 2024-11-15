@@ -160,7 +160,7 @@ export const useAuthSignUp = () => {
         })
 
         reset()
-
+        console.log(`this is the user status ${user.status}`)
         if (user.status === 200) {
           toast("Success", {
             description: user.message,
@@ -172,7 +172,7 @@ export const useAuthSignUp = () => {
         }
         if (user.status !== 200) {
           toast("Error", {
-            description: user.message + "action failed",
+            description: user.message + " action failed",
           })
           router.refresh
         }

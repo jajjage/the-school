@@ -7,6 +7,8 @@ import { Trash } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { IChannels } from "."
+import { IconRenderer } from "../icon-renderer"
+import IconDropDown from "./icon-dropdown"
 // import { IconRenderer } from "../icon-renderer"
 // import IconDropDown from "./icon-dropdown"
 
@@ -115,26 +117,27 @@ const SideBarMenu = ({
                     })}
                 >
                   <div className="flex gap-x-2 items-center">
-                    {/* {channel.id === current && edit ? (
-                      // <IconDropDown
-                      //   ref={triggerRef}
-                      //   page={currentPage}
-                      //   onSetIcon={onSetIcon}
-                      //   channelid={channel.id}
-                      //   icon={channel.icon}
-                      //   currentIcon={icon}
-                      // />
+                    {channel.id === current && edit ? (
+                      <IconDropDown
+                        ref={triggerRef}
+                        page={currentPage}
+                        onSetIcon={onSetIcon}
+                        channelid={channel.id}
+                        icon={channel.icon}
+                        currentIcon={icon}
+                      />
                     ) : (
-                      // <IconRenderer
-                      //   icon={channel.icon}
-                      //   mode={currentPage === channel.id ? "LIGHT" : "DARK"}
-                      // />
-                    )} */}
+                      <IconRenderer
+                        icon={channel.icon}
+                        mode={currentPage === channel.id ? "LIGHT" : "DARK"}
+                      />
+                    )}
                     {channel.id === current && edit ? (
                       <Input
                         type="text"
                         ref={inputRef}
                         className="bg-transparent p-0 text-lg m-0 h-full"
+            
                       />
                     ) : (
                       <p
@@ -170,5 +173,6 @@ const SideBarMenu = ({
     </div>
   )
 }
+
 
 export default SideBarMenu

@@ -1,6 +1,3 @@
-/// <reference lib="dom" />
-/// <reference lib="dom.iterable" />
-
 import { onDeleteChannel, onUpdateChannelInfo } from "@/actions/channels"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useEffect, useRef, useState } from "react"
@@ -29,15 +26,38 @@ export const useChannelInfo = () => {
   } = useMutation({
     mutationFn: (data: { name?: string; icon?: string }) =>
       onUpdateChannelInfo(channel!, data.name, data.icon),
-    onMutate: () => {
-      setEdit(false)
-      onSetIcon(undefined)
+    onMutate: async (newData) => {
+      // Cancel any outgoing refetches so they don't overwrite our optimistic update
+      await client.cancelQueries({ queryKey: ['group-channels'] });
+
+      // Snapshot the previous value
+      const previousData = client.getQueryData(['group-channels']);
+
+      // Optimistically update to the new value
+      client.setQueryData(['group-channels'], (old: any) => {
+        // Update the channel name in your cached data structure
+        // This will depend on your data structure
+        return old; // Update this according to your data structure
+      });
+
+      setEdit(false);
+      onSetIcon(undefined);
+
+      // Return a context object with the snapshotted value
+      return { previousData };
     },
     onSuccess: (data) => {
       return toast(data.status !== 200 ? "Error" : "Success", {
         description: data.message,
       })
     },
+
+    onError: (err, newData, context) => {
+      // If the mutation fails, use the context returned from onMutate to roll back
+      client.setQueryData(['group-channels'], context?.previousData);
+      setEdit(true); // Reopen edit mode if update fails
+    },
+
     onSettled: async () => {
       return await client.invalidateQueries({
         queryKey: ["group-channels"],
@@ -58,34 +78,59 @@ export const useChannelInfo = () => {
     },
   })
 
-  const onEndChannelEdit = (event: Event) => {
-    if (inputRef.current && channelRef.current && triggerRef.current) {
-      if (
-        !inputRef.current.contains(event.target as Node | null) &&
-        !channelRef.current.contains(event.target as Node | null) &&
-        !triggerRef.current.contains(event.target as Node | null) &&
-        !document.getElementById("icon-list")
-      ) {
-        if (inputRef.current.value) {
-          updateMutation({
-            name: inputRef.current.value,
-          })
-        }
-        if (icon) {
-          updateMutation({ icon })
-        } else {
-          setEdit(false)
-        }
+  const onEndChannelEdit = (event: MouseEvent) => {
+    if (!inputRef.current || !edit) return;
+
+    const clickedElement = event.target as Node;
+    const isClickOutside = ![inputRef.current, channelRef.current, triggerRef.current].some(
+      ref => ref?.contains(clickedElement)
+    );
+    const isNotIconList = !document.getElementById('icon-list');
+
+    if (isClickOutside && isNotIconList) {
+      const newName = inputRef.current.value;
+      
+      if (newName) {
+        updateMutation({ name: newName });
+      }
+      if (icon) {
+        updateMutation({ icon });
+      } else {
+        setEdit(false);
       }
     }
-  }
+  };
+
+  const handleUpdateChannel = () => {
+    if (!inputRef.current) return;
+    
+    const newName = inputRef.current.value;
+    if (newName) {
+      updateMutation({ name: newName });
+    }
+    if (icon) {
+      updateMutation({ icon });
+    } else {
+      setEdit(false);
+    }
+  };
+   // Handler for keypress
+   const onKeyPress = (event: KeyboardEvent) => {
+    if (!inputRef.current || !edit) return;
+
+    if (event.key === 'Enter') {
+      handleUpdateChannel();
+    }
+  };
 
   useEffect(() => {
     document.addEventListener("click", onEndChannelEdit, false)
+    document.addEventListener('keydown', onKeyPress);
     return () => {
       document.removeEventListener("click", onEndChannelEdit, false)
+      document.removeEventListener('keydown', onKeyPress);
     }
-  }, [icon])
+  }, [edit, icon])
 
   const onChannelDelete = (id: string) => deleteMutation({ id })
 

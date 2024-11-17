@@ -2,7 +2,7 @@ import { onAuthenticatedUser } from "@/actions/auth"
 import { onGetChannelInfo } from "@/actions/channels"
 import { onGetGroupInfo } from "@/actions/groups"
 import { currentUser } from "@clerk/nextjs/server"
-import { QueryClient } from "@tanstack/react-query"
+import { dehydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query"
 
 type Props = {
   params: { channelid: string; groupid: string }
@@ -23,7 +23,11 @@ const GroupChannelPage = async ({ params }: Props) => {
     queryFn: () => onGetGroupInfo(params.groupid),
   })
 
-  return <div></div>
+  return (
+    <HydrationBoundary state={dehydrate(client)}>
+      
+    </HydrationBoundary>
+  )
 }
 
 export default GroupChannelPage

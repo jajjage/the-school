@@ -8,6 +8,7 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { IChannels } from "."
 import { IconRenderer } from "../icon-renderer"
+import ToolTips from "../tooltip"
 import IconDropDown from "./icon-dropdown"
 // import { IconRenderer } from "../icon-renderer"
 // import IconDropDown from "./icon-dropdown"
@@ -140,18 +141,34 @@ const SideBarMenu = ({
             
                       />
                     ) : (
-                      <p
-                        className={cn(
-                          "text-lg capitalize",
-                          currentPage === channel.id
-                            ? "text-white"
-                            : "text-themeTextGray",
+                      {...channel.name !== "general" && channel.name !== "announcements" ? (
+                        <ToolTips>
+                            <p
+                          className={cn(
+                            "text-lg capitalize",
+                            currentPage === channel.id
+                              ? "text-white"
+                              : "text-themeTextGray",
+                          )}
+                            >
+                          {isPending && updateVariables && current === channel.id
+                            ? updateVariables.name
+                            : channel.name}
+                          </p>
+                        </ToolTips>
+                        ):( 
+                          <p className={cn(
+                            "text-lg capitalize",
+                            currentPage === channel.id
+                              ? "text-white"
+                              : "text-themeTextGray",
+                          )}
+                          >
+                          {isPending && updateVariables && current === channel.id
+                            ? updateVariables.name
+                            : channel.name}
+                          </p>
                         )}
-                      >
-                        {isPending && updateVariables && current === channel.id
-                          ? updateVariables.name
-                          : channel.name}
-                      </p>
                     )}
                   </div>
                   {channel.name !== "general" &&

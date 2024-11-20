@@ -7,6 +7,7 @@ import { onClearSearch, onSearch } from "@/redux/slices/search-slice"
 import { AppDispatch } from "@/redux/store"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation, useQuery } from "@tanstack/react-query"
+import { useRouter } from "next/navigation"
 import { JSONContent } from "novel"
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
@@ -105,6 +106,7 @@ export const useSearch = (search: "GROUPS" | "POSTS") => {
 }
 
 export const useGroupSettings = (groupid: string) => {
+  const router = useRouter()
   const { data } = useQuery({
     queryKey: ["group-info"],
     queryFn: () => onGetGroupInfo(groupid),
@@ -253,9 +255,9 @@ export const useGroupSettings = (groupid: string) => {
       })
     },
   })
-  // const router = useRouter()
+
   const onUpdate = handleSubmit(async (values) => update(values))
-  // if (data?.status !== 200) router.push(`/group/create`)
+  if (data?.status !== 200) router.push(`/group/create`)
 
   return {
     data,

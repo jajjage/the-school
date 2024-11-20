@@ -54,7 +54,7 @@ const GroupLayout = async ({ children, params }: Props) => {
     queryKey: ["member-chats"],
     queryFn: () => onGetAllGroupMembers(params.groupid),
   })
-
+  
   return (
     <HydrationBoundary state={dehydrate(query)}>
       <div className="flex h-screen md:pt-5">

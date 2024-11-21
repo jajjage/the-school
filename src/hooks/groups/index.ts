@@ -1,4 +1,5 @@
-import { onGetExploreGroup, onGetGroupInfo, onSearchGroups, onUpdateGroupGallery, onUpDateGroupSettings } from "@/actions/groups"
+import { onAddCustomDomain, onGetDomainConfig, onGetExploreGroup, onGetGroupInfo, onSearchGroups, onUpdateGroupGallery, onUpDateGroupSettings } from "@/actions/groups"
+import { AddCustomDomainSchema } from "@/components/forms/domain/schema"
 import { GroupSettingsSchema } from "@/components/forms/group-settings/schema"
 import { UpdateGallerySchema } from "@/components/forms/media-gallery/schema"
 import { upload } from "@/lib/uploadcare"
@@ -8,7 +9,7 @@ import { onOnline } from "@/redux/slices/online-member-slice"
 import { GroupStateProps, onClearSearch, onSearch } from "@/redux/slices/search-slice"
 import { AppDispatch } from "@/redux/store"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useMutation, useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { useRouter } from "next/navigation"
 import { JSONContent } from "novel"
 import { useEffect, useLayoutEffect, useRef, useState } from "react"
@@ -549,5 +550,49 @@ export const useMediaGallery = (groupid: string) => {
     errors,
     onUpdateGallery,
     isPending,
+  }
+}
+
+export const useCustomDomain = (groupid: string) => {
+  const {
+    handleSubmit,
+    register,
+    formState: { errors },
+    reset,
+  } = useForm<z.infer<typeof AddCustomDomainSchema>>({
+    resolver: zodResolver(AddCustomDomainSchema),
+  })
+
+  const client = useQueryClient()
+
+  const { data } = useQuery({
+    queryKey: ["domain-config"],
+    queryFn: () => onGetDomainConfig(groupid),
+  })
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: (data: { domain: string }) =>
+      onAddCustomDomain(groupid, data.domain),
+    onMutate: reset,
+    onSuccess: (data) => {
+      return toast(data.status === 200 ? "Success" : "Error", {
+        description: data.message,
+      })
+    },
+    onSettled: async () => {
+      return await client.invalidateQueries({
+        queryKey: ["domain-config"],
+      })
+    },
+  })
+
+  const onAddDomain = handleSubmit(async (values) => mutate(values))
+
+  return {
+    onAddDomain,
+    isPending,
+    register,
+    errors,
+    data,
   }
 }
